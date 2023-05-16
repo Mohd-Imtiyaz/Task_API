@@ -15,6 +15,7 @@ namespace Task_API.Services
             _taskDataBaseContext = taskDataBaseContext;
         }
 
+        // This function is used to hash password
         public async Task<TUser> HashingPasswordAsync(string password)
         {
             if (string.IsNullOrEmpty(password))
