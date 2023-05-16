@@ -50,9 +50,13 @@ namespace Task_API.Services
             var hashedpassword = await HashingPasswordAsync(muser.UPassword);
             var adduser = new TUser();
 
+
             adduser.UName = muser.UName;
+            adduser.UUserName = muser.UUserName;
             adduser.UPassword = hashedpassword.UPassword;
+            adduser.Roles = muser.Roles;
             adduser.UEmail = muser.UEmail;
+            adduser.ActiveStatus = muser.ActiveStatus;
 
             await _taskDataBaseContext.TUsers.AddAsync(adduser);
             await _taskDataBaseContext.SaveChangesAsync();
@@ -81,3 +85,4 @@ namespace Task_API.Services
         }
     }
 }
+
