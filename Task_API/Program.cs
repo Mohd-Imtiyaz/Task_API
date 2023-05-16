@@ -1,7 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using Task_API.DBContext;
 using Task_API.Interfaces;
 using Task_API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<TaskDataBaseContext>(
+    dbContextOptions => dbContextOptions.UseSqlServer(
+        builder.Configuration["ConnectionStrings:ConnectionString"]));
 
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
