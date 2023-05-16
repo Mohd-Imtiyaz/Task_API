@@ -1,4 +1,10 @@
+using Task_API.Interfaces;
+using Task_API.Services;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Add services to the container.
 
