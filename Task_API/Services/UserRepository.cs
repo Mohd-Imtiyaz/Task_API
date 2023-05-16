@@ -67,9 +67,14 @@ namespace Task_API.Services
         // This meathod is used to update a user by ID
         public async Task<TUser> UpdateUserAccountByID(TUser user)
         {
+            var hashingPassword = await HashingPasswordAsync(user.UPassword);
+
             var upuser = await _taskDataBaseContext.TUsers.Where(u => u.UId == user.UId).FirstOrDefaultAsync();
             upuser.UName = user.UName;
+            upuser.UPassword = hashingPassword.UPassword;
+            upuser.Roles = user.Roles;
             upuser.UEmail = user.UEmail;
+            upuser.ActiveStatus = user.ActiveStatus;
 
             _taskDataBaseContext.TUsers.Update(upuser);
             return upuser;
