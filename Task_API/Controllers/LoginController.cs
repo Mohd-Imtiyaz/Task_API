@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Task_API.DBContext;
 using Task_API.Interfaces;
+using Task_API.ManualClasses;
 using Task_API.Model;
 using Task_API.Services;
 
@@ -11,29 +12,31 @@ namespace Task_API.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        TaskDataBaseContext taskDataBaseContext;
         private readonly IUserRepository _userRepository;
         private readonly IJWTRepository _jwtRepository;
 
-        public LoginController(TaskDataBaseContext taskDataBaseContext, IJWTRepository jwtRepository, IUserRepository userRepository)
+        public LoginController(IJWTRepository jwtRepository, IUserRepository userRepository)
         {
-            this.taskDataBaseContext = taskDataBaseContext;
             _jwtRepository = jwtRepository;
             _userRepository = userRepository;
         }
 
+
+
         [HttpPost("Login")]
-        public async Task<ActionResult<TUser>> login(TUser user)
+        public async Task<ActionResult<MLogin>> login(MLogin mLogin)
         {
             try
             {
-                if (user == null || string.IsNullOrEmpty(user.UName) || string.IsNullOrEmpty(user.UPassword))
+                var user = await _userRepository.GetUserByName(mLogin.UName);
+
+                if (mLogin == null || string.IsNullOrEmpty(user.UName) || string.IsNullOrEmpty(user.UPassword))
                 {
                     return BadRequest("Invalid username or password");
                 }
                 var user1 = await _userRepository.GetUserByName(user.UName);
                 var userindata = await _userRepository.GetUserByName(user1.UName);
-                var hashedPassword = await _jwtRepository.ValidateHashingPasswordAsync(user.UPassword);
+                var hashedPassword = await _jwtRepository.ValidateHashingPasswordAsync(mLogin.UPassword);
 
                 if (userindata.UPassword != hashedPassword.UPassword)
                 {
