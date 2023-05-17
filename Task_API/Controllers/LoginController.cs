@@ -24,7 +24,7 @@ namespace Task_API.Controllers
 
 
         [HttpPost("Login")]
-        public async Task<ActionResult<MLogin>> login(MLogin mLogin)
+        public async Task<ActionResult<MLogin>> Login(MLogin mLogin)
         {
             try
             {
