@@ -16,6 +16,7 @@ builder.Services.AddDbContext<TaskDataBaseContext>(
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJWTRepository, JWTRepository>();
+builder.Services.AddScoped<ITasksRepository, TasksRepository>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

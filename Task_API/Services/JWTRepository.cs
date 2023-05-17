@@ -67,6 +67,11 @@ namespace Task_API.Services
             }
         }
 
+        //public void ReturnTokenForUsername(string username)
+        //{
+        //    return tokenreturn;
+        //}
+
         public bool TokenValid(string token)
         {
             return Validtoken.Contains(token);
