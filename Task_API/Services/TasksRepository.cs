@@ -9,10 +9,12 @@ namespace Task_API.Services
     public class TasksRepository : ITasksRepository
     {
         TaskDataBaseContext _taskDataBaseContext;
+        private readonly IUserRepository _userRepository;
 
-        public TasksRepository(TaskDataBaseContext taskDataBaseContext)
+        public TasksRepository(TaskDataBaseContext taskDataBaseContext, IUserRepository userRepository)
         {
             _taskDataBaseContext = taskDataBaseContext;
+            _userRepository = userRepository;
         }
 
         public async Task<TUserTask> GetTasksByTitle(string title)
@@ -21,9 +23,9 @@ namespace Task_API.Services
             return retrivedTask;
         }
 
-        public async Task<IEnumerable<TUserTask>> GetAllTasksOfUser(string userName)
+        public async Task<IEnumerable<TUserTask>> GetAllTasksOfUser(string loggedinUser)
         {
-            var retrivedAllTasks = await _taskDataBaseContext.TUserTasks.Where(u => u.TTaskCreater == userName).ToListAsync();
+            var retrivedAllTasks = await _taskDataBaseContext.TUserTasks.Where(u => u.TTaskCreater == loggedinUser).ToListAsync();
             return retrivedAllTasks;
         }
         public async Task<MAddingTask> AddTaskForUser(MAddingTask mAddingTask, string userName) // may be i need to add a bool field in paramater
@@ -34,7 +36,7 @@ namespace Task_API.Services
             addUserTask.TDescription = mAddingTask.TDescription;
             addUserTask.TTaskCreater = userName; // logic to add current user need to be done here
             addUserTask.TStartDate = mAddingTask.TStartDate;
-            addUserTask.TEndDate = mAddingTask.TEndDate;
+            addUserTask.TEndDate = mAddingTask.TEndDate; 
             addUserTask.TFile = mAddingTask.TFile;
 
             await _taskDataBaseContext.TUserTasks.AddAsync(addUserTask);
