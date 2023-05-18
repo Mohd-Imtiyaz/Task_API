@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Task_API.DBContext;
 using Task_API.Interfaces;
 using Task_API.ManualClasses;
@@ -8,11 +9,11 @@ using Task_API.Model;
 
 namespace Task_API.Controllers
 {
-    [Authorize]
     [Route("api/Admin")]
     [ApiController]
     public class UserController : ControllerBase
     {
+
         TaskDataBaseContext _taskDataBaseContext;
         private readonly IUserRepository _userRepository;
 
@@ -26,6 +27,7 @@ namespace Task_API.Controllers
         [Route("AddUser")]
         public async Task<ActionResult<MUser>> AddUser(MUser muser)
         {
+            var userRoles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
             try
             {
                 var existingUser = await _userRepository.GetUserByName(muser.UUserName);
@@ -44,9 +46,13 @@ namespace Task_API.Controllers
         }
 
 
+       
         [HttpGet("GetValue")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult> getvalue(string username)
         {
+            var userRoles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+
             try
             {
                 var use = await _userRepository.GetUserByName(username);

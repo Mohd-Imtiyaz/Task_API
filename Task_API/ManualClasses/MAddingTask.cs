@@ -6,8 +6,6 @@
 
         public string? TDescription { get; set; }
 
-        public string? TTaskCreater { get; set; }
-
         public DateTime? TStartDate { get; set; }
 
         public DateTime? TEndDate { get; set; }

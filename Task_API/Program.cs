@@ -54,6 +54,12 @@ builder.Services.AddSwaggerGen(setupAction =>
     });
 });
 
+//builder.Services.AddAuthorization(options =>
+//{
+//        options.AddPolicy("AdminOnly", policy =>
+//        policy.RequireRole("Admin"));
+//});
+
 
 
 // Add services to the container.
