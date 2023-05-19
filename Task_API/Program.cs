@@ -9,6 +9,9 @@ using Task_API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+builder.Logging.AddLog4Net();
+
 builder.Services.AddDbContext<TaskDataBaseContext>(
     dbContextOptions => dbContextOptions.UseSqlServer(
         builder.Configuration["ConnectionStrings:ConnectionString"]));
@@ -17,6 +20,7 @@ builder.Services.AddDbContext<TaskDataBaseContext>(
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJWTRepository, JWTRepository>();
 builder.Services.AddScoped<ITasksRepository, TasksRepository>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

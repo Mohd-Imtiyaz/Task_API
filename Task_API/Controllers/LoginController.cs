@@ -14,11 +14,13 @@ namespace Task_API.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IJWTRepository _jwtRepository;
+        private readonly ILogger<LoginController> _logger;
 
-        public LoginController(IJWTRepository jwtRepository, IUserRepository userRepository)
+        public LoginController(IJWTRepository jwtRepository, IUserRepository userRepository, ILogger<LoginController> logger)
         {
             _jwtRepository = jwtRepository;
             _userRepository = userRepository;
+            _logger = logger;
         }
 
 
@@ -28,14 +30,14 @@ namespace Task_API.Controllers
         {
             try
             {
-                var user = await _userRepository.GetUserByName(mLogin.UName);
+                var user = await _userRepository.GetUserByName(mLogin.UUserName);
 
-                if (mLogin == null || string.IsNullOrEmpty(user.UName) || string.IsNullOrEmpty(user.UPassword))
+                if (mLogin == null || string.IsNullOrEmpty(user.UUserName) || string.IsNullOrEmpty(user.UPassword))
                 {
                     return BadRequest("Invalid username or password");
                 }
-                var user1 = await _userRepository.GetUserByName(user.UName);
-                var userindata = await _userRepository.GetUserByName(user1.UName);
+                var user1 = await _userRepository.GetUserByName(user.UUserName);
+                var userindata = await _userRepository.GetUserByName(user1.UUserName);
                 var hashedPassword = await _jwtRepository.ValidateHashingPasswordAsync(mLogin.UPassword);
 
                 if (userindata.UPassword != hashedPassword.UPassword)
@@ -43,11 +45,12 @@ namespace Task_API.Controllers
                     return BadRequest("Invalid Username or password");
                 }
                 var Token = await _jwtRepository.TokenGenerate(user1);
-                return Ok(Token);
+                return StatusCode(201, Token);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal Servar Error");
+                _logger.LogError(ex.Message);
+                return StatusCode(500, "Internal Servar Error"+ex);
             }
 
         }
