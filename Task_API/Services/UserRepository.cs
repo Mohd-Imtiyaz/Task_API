@@ -40,7 +40,7 @@ namespace Task_API.Services
         // This meathod is used to get user By Username
         public async Task<TUser> GetUserByName(string Username)
         {
-            var user = await _taskDataBaseContext.TUsers.Where(u => u.UName == Username).FirstOrDefaultAsync();
+            var user = await _taskDataBaseContext.TUsers.Where(u => u.UUserName == Username).FirstOrDefaultAsync();
             return user;
         }
 
@@ -86,7 +86,7 @@ namespace Task_API.Services
         {
             var delUser = await _taskDataBaseContext.TUsers.Where(u => u.UId == id).FirstOrDefaultAsync();
             _taskDataBaseContext.TUsers.Remove(delUser);
-            _taskDataBaseContext.SaveChanges();
+            _taskDataBaseContext.SaveChangesAsync();
             return delUser;
         }
     }

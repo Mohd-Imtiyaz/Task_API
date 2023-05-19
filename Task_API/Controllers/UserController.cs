@@ -16,11 +16,13 @@ namespace Task_API.Controllers
 
         TaskDataBaseContext _taskDataBaseContext;
         private readonly IUserRepository _userRepository;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(TaskDataBaseContext taskDataBaseContext, IUserRepository userRepository)
+        public UserController(TaskDataBaseContext taskDataBaseContext, IUserRepository userRepository, ILogger<UserController> logger)
         {
             _taskDataBaseContext = taskDataBaseContext;
             _userRepository = userRepository;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -41,14 +43,16 @@ namespace Task_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return StatusCode(500, "Internal Server Error...");
             }
         }
 
 
        
-        [HttpGet("GetValue")]
-        [Authorize(Policy = "AdminOnly")]
+        [HttpGet]
+        [Route("GetValue")]
+        [Authorize]
         public async Task<ActionResult> getvalue(string username)
         {
             var userRoles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
@@ -58,7 +62,7 @@ namespace Task_API.Controllers
                 var use = await _userRepository.GetUserByName(username);
                 if (use != null)
                 {
-                    return Ok(use);
+                    return StatusCode(200, use);
                 }
                 else
                 {
@@ -67,36 +71,41 @@ namespace Task_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return StatusCode(500, "Internal Server Error...");
             }
         }
 
 
-        [HttpPut("UpdateUser")]
+        [HttpPut]
+        [Route("UpdateUser")]
         public async Task<ActionResult> updateuser(TUser user)
         {
             try
             {
                 var updatedUser = await _userRepository.UpdateUserAccountByID(user);
-                return Ok(updatedUser);
+                return StatusCode(200, updatedUser);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return StatusCode(500, "Internal Server Error...");
             }
         }
 
 
-        [HttpDelete("DeleteUser")]
+        [HttpDelete]
+        [Route("DeleteUser")]
         public async Task<ActionResult> delUser(int id)
         {
             try
             {
                 var dellUSer = await _userRepository.DeleteUser(id);
-                return Ok(dellUSer);
+                return StatusCode(200, "User Deleted Succesfully...");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return StatusCode(500, "Internal Server Error...");
             }
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using Task_API.DBContext;
 using Task_API.Interfaces;
 using Task_API.ManualClasses;
@@ -23,11 +24,47 @@ namespace Task_API.Services
             return retrivedTask;
         }
 
+        public async Task<List<TUserTask>> SearchingWithAnyType(string searchQuery, string loggedinUser, bool isAccending)
+        {
+            var UserTasks = await _taskDataBaseContext.TUserTasks.ToListAsync();
+
+            var matchingTasks = UserTasks
+                .Where(m => m.TTitle.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) && m.TTaskCreater == loggedinUser)
+                .ToList();
+
+            matchingTasks = isAccending ? matchingTasks.OrderBy(m => m.TTitle).ToList() : matchingTasks.OrderByDescending(m => m.TTitle).ToList();
+
+
+            return matchingTasks;
+        }
+
         public async Task<IEnumerable<TUserTask>> GetAllTasksOfUser(string loggedinUser)
         {
             var retrivedAllTasks = await _taskDataBaseContext.TUserTasks.Where(u => u.TTaskCreater == loggedinUser).ToListAsync();
+
             return retrivedAllTasks;
         }
+
+
+        // start
+        public async Task<MPaginationParameters> GetAllTaskByPage(int page, string loggedinUser)
+        {
+            var PageResults = 4f; //2 content in 1 page
+            var PageCount = Math.Ceiling(_taskDataBaseContext.TUserTasks.Where(u => u.TTaskCreater == loggedinUser).Count() / PageResults);
+
+            var Blog = await _taskDataBaseContext.TUserTasks.Skip((page - 1) * (int)PageResults).Take((int)PageResults).ToListAsync();
+
+            var response = new MPaginationParameters
+            {
+                AllTasks = Blog,
+                CurrentPage = page,
+                Pages = (int)PageCount
+            };
+
+            return response;
+        }
+
+        // end
         public async Task<MAddingTask> AddTaskForUser(MAddingTask mAddingTask, string userName) // may be i need to add a bool field in paramater
         {
             var addUserTask = new TUserTask();
@@ -43,6 +80,40 @@ namespace Task_API.Services
             await _taskDataBaseContext.SaveChangesAsync();
 
             return mAddingTask;
+        }
+
+        public async Task<MUpdatingTask> UpdateTask(MUpdatingTask mUpdatingTask, string taskTitle, string loggedInUser)
+        {
+            var gettingUserTask = await _taskDataBaseContext.TUserTasks.Where(u => u.TTitle == taskTitle && u.TTaskCreater == loggedInUser).FirstOrDefaultAsync();
+
+            if (gettingUserTask != null)
+            {
+                gettingUserTask.TTitle = mUpdatingTask.TTitle;
+                gettingUserTask.TDescription = mUpdatingTask.TDescription;
+                gettingUserTask.TStartDate = mUpdatingTask.TStartDate;
+                gettingUserTask.TEndDate = mUpdatingTask.TEndDate;
+                gettingUserTask.TFile = mUpdatingTask.TFile;
+
+                _taskDataBaseContext.TUserTasks.Update(gettingUserTask);
+                _taskDataBaseContext.SaveChangesAsync();
+
+                return mUpdatingTask;
+            }
+            else
+            {
+                mUpdatingTask.TTitle = "Title Not Found";
+                return mUpdatingTask;
+            }
+        }
+
+        public async Task<TUserTask> DeletingTask(string title, string logedinUser)
+        {
+
+            var loggedinUserTasks = await _taskDataBaseContext.TUserTasks.Where(u => u.TTitle == title && u.TTaskCreater == logedinUser).FirstOrDefaultAsync();
+
+            _taskDataBaseContext.TUserTasks.Remove(loggedinUserTasks);
+            _taskDataBaseContext.SaveChangesAsync();
+            return loggedinUserTasks;
         }
     }
 }
