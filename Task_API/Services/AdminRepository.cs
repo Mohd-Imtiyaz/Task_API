@@ -8,21 +8,11 @@ namespace Task_API.Services
 {
     public class AdminRepository : IAdminRepository
     {
-        TaskDataBaseContext _taskDataBaseContext;
+        private readonly TaskDataBaseContext _taskDataBaseContext;
 
         public AdminRepository(TaskDataBaseContext taskDataBaseContext)
         {
             _taskDataBaseContext = taskDataBaseContext;
-        }
-
-        public async Task<List<TUser>> SearchingUserWithUName(string username)
-        {
-            var retrivedUser = await _taskDataBaseContext.TUsers.ToListAsync();
-
-            var retrivedUserList = retrivedUser.Where(u => u.UUserName.Contains(username, StringComparison.OrdinalIgnoreCase)).ToList();
-
-            return retrivedUserList;
-
         }
 
         public async Task<IEnumerable<TUserTask>> GetAllTasks(bool isAccending)
@@ -34,12 +24,18 @@ namespace Task_API.Services
             return allTask;
         }
 
-        public async Task<IEnumerable<TUserTask>> GetAllTaskFromUsername(string username)
-        {
-            var taskByUsername = await _taskDataBaseContext.TUserTasks.Where(m => m.TTaskCreater.Contains(username, StringComparison.OrdinalIgnoreCase)).ToListAsync();
 
-            return taskByUsername;
+        public async Task<List<TUserTask>> GetAllTaskFromUsername(string username)
+        {
+            var UserTasks = await _taskDataBaseContext.TUserTasks.ToListAsync();
+
+            var matchingTasks = UserTasks.Where(m => m.TTaskCreater.Contains(username, StringComparison.OrdinalIgnoreCase)).ToList();
+
+
+            return matchingTasks;
         }
+
+        
 
         public async Task<List<TUserTask>> SearchAnyTask(string searchQuery)
         {
@@ -47,26 +43,26 @@ namespace Task_API.Services
 
             var matchingTasks = UserTasks.Where(m => m.TTitle.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
 
-
             return matchingTasks;
         }
 
-        public async Task<MUpdatingTask> UpdatingTask(MUpdatingTask mUpdatingTask)
+        public async Task<TUserTask> UpdatingTask(TUserTask userTask, string title)
         {
-            var updateTask = await _taskDataBaseContext.TUserTasks.Where(u => u.TTitle == mUpdatingTask.TTitle).FirstOrDefaultAsync();
+            var updateTask = await _taskDataBaseContext.TUserTasks.Where(u => u.TTitle == title).FirstOrDefaultAsync();
 
             if (updateTask != null)
             {
-                updateTask.TTitle = mUpdatingTask.TTitle;
-                updateTask.TDescription = mUpdatingTask.TDescription;
-                updateTask.TStartDate = mUpdatingTask.TStartDate;
-                updateTask.TEndDate = mUpdatingTask.TEndDate;
-                updateTask.TFile = mUpdatingTask.TFile;
+                updateTask.TTitle = userTask.TTitle;
+                updateTask.TTaskCreater = userTask.TTaskCreater;
+                updateTask.TDescription = userTask.TDescription;
+                updateTask.TStartDate = userTask.TStartDate;
+                updateTask.TEndDate = userTask.TEndDate;
+                updateTask.TFile = userTask.TFile;
 
                 _taskDataBaseContext.TUserTasks.Update(updateTask);
                 _taskDataBaseContext.SaveChangesAsync();
 
-                return mUpdatingTask;
+                return userTask;
             }
             else
             {

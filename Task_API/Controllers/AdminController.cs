@@ -29,29 +29,6 @@ namespace Task_API.Controllers
         }
 
         [HttpGet]
-        [Route("GetUserWithUsername")]
-        public async Task<ActionResult> GetUserWithUsername(string userName)
-        {
-            try
-            {
-                var searchedUser = _adminRepository.SearchingUserWithUName(userName);
-                if (searchedUser != null)
-                {
-                    return StatusCode(200, searchedUser);
-                }
-                else
-                {
-                    return StatusCode(404, "User Not Found...");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return StatusCode(500, "Internal Server Error...");
-            }
-        }
-
-        [HttpGet]
         [Route("GetAllTasks")]
         public async Task<ActionResult> GetAllTasks(bool isAccending)
         {
@@ -108,11 +85,11 @@ namespace Task_API.Controllers
 
         [HttpPut]
         [Route("UpdatingTask")]
-        public async Task<ActionResult<MUpdatingTask>> UpdatingTask(MUpdatingTask mUpdatingTask)
+        public async Task<ActionResult<MUpdatingTask>> UpdatingTask(MUpdatingTask mUpdatingTask, string titleToBeUpdated)
         {
             try
             {
-                var updatingTask = await _adminRepository.UpdatingTask(mUpdatingTask);
+                var updatingTask = await _adminRepository.UpdatingTask(mUpdatingTask, titleToBeUpdated);
                 return StatusCode(202, "Task Updated Successfully...");
             }
             catch (Exception ex)
