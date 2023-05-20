@@ -9,6 +9,7 @@ using Task_API.Model;
 
 namespace Task_API.Controllers
 {
+    [Authorize]
     [Route("api/Admin")]
     [ApiController]
     public class UserController : ControllerBase

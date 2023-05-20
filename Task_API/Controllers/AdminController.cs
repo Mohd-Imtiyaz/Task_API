@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Task_API.DBContext;
@@ -9,6 +10,7 @@ using Task_API.Services;
 
 namespace Task_API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
@@ -24,29 +26,6 @@ namespace Task_API.Controllers
             _adminRepository = adminRepository;
             _tasksRepository = tasksRepository;
             _logger = logger;
-        }
-
-        [HttpGet]
-        [Route("GetUserWithUsername")]
-        public async Task<ActionResult> GetUserWithUsername(string userName)
-        {
-            try
-            {
-                var searchedUser = _adminRepository.SearchingUserWithUName(userName);
-                if (searchedUser != null)
-                {
-                    return StatusCode(200, searchedUser);
-                }
-                else
-                {
-                    return StatusCode(404, "User Not Found...");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return StatusCode(500, "Internal Server Error...");
-            }
         }
 
         [HttpGet]
@@ -106,11 +85,11 @@ namespace Task_API.Controllers
 
         [HttpPut]
         [Route("UpdatingTask")]
-        public async Task<ActionResult<MUpdatingTask>> UpdatingTask(MUpdatingTask mUpdatingTask)
+        public async Task<ActionResult<MUpdatingTask>> UpdatingTask(MUpdatingTask mUpdatingTask, string titleToBeUpdated)
         {
             try
             {
-                var updatingTask = await _adminRepository.UpdatingTask(mUpdatingTask);
+                var updatingTask = await _adminRepository.UpdatingTask(mUpdatingTask, titleToBeUpdated);
                 return StatusCode(202, "Task Updated Successfully...");
             }
             catch (Exception ex)

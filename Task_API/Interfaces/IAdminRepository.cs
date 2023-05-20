@@ -5,15 +5,13 @@ namespace Task_API.Interfaces
 {
     public interface IAdminRepository
     {
-        Task<List<TUser>> SearchingUserWithUName(string username);
+        Task<List<TUserTask>> GetAllTaskFromUsername(string username);
 
         Task<IEnumerable<TUserTask>> GetAllTasks(bool isAccending);
 
-        Task<IEnumerable<TUserTask>> GetAllTaskFromUsername(string username);
-
         Task<List<TUserTask>> SearchAnyTask(string searchQuery);
 
-        Task<MUpdatingTask> UpdatingTask(MUpdatingTask mUpdatingTask);
+        Task<TUserTask> UpdatingTask(TUserTask userTask, string title);
 
         Task<TUserTask> ReAssignTask(string taskTitle, string assigningToUserName);
 
