@@ -66,8 +66,8 @@ namespace Task_API.Services
             }
             else
             {
-                mUpdatingTask.TTitle = "Title Not Found";
-                return mUpdatingTask;
+                userTask.TTitle = "Title Not Found";
+                return userTask;
             }
         }
 
