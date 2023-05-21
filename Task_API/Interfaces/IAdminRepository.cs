@@ -11,7 +11,7 @@ namespace Task_API.Interfaces
 
         Task<List<TUserTask>> SearchAnyTask(string searchQuery);
 
-        Task<TUserTask> UpdatingTask(TUserTask userTask, string title);
+        Task<MAdminEditUserTask> UpdatingTask(MAdminEditUserTask mAdminEditUserTask, string title);
 
         Task<TUserTask> ReAssignTask(string taskTitle, string assigningToUserName);
 

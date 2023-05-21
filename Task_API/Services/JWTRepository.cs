@@ -40,7 +40,7 @@ namespace Task_API.Services
                         new Claim("UserName", user.UName),
                         new Claim("Email", user.UEmail),
                         new Claim("Name", user.UName),
-                        new Claim("Roles", user.Roles),
+                        new Claim(ClaimTypes.Role, user.Roles),
                         new Claim("ActiveStatus", user.ActiveStatus)
                     };
 
