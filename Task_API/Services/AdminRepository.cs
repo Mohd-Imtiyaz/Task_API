@@ -46,28 +46,28 @@ namespace Task_API.Services
             return matchingTasks;
         }
 
-        public async Task<TUserTask> UpdatingTask(TUserTask userTask, string title)
+        public async Task<MAdminEditUserTask> UpdatingTask(MAdminEditUserTask mAdminEditUserTask, string title)
         {
             var updateTask = await _taskDataBaseContext.TUserTasks.Where(u => u.TTitle == title).FirstOrDefaultAsync();
 
             if (updateTask != null)
             {
-                updateTask.TTitle = userTask.TTitle;
-                updateTask.TTaskCreater = userTask.TTaskCreater;
-                updateTask.TDescription = userTask.TDescription;
-                updateTask.TStartDate = userTask.TStartDate;
-                updateTask.TEndDate = userTask.TEndDate;
-                updateTask.TFile = userTask.TFile;
+                updateTask.TTitle = mAdminEditUserTask.TTitle;
+                updateTask.TTaskCreater = mAdminEditUserTask.TTaskCreater;
+                updateTask.TDescription = mAdminEditUserTask.TDescription;
+                updateTask.TStartDate = mAdminEditUserTask.TStartDate;
+                updateTask.TEndDate = mAdminEditUserTask.TEndDate;
+                updateTask.TFile = mAdminEditUserTask.TFile;
 
                 _taskDataBaseContext.TUserTasks.Update(updateTask);
                 _taskDataBaseContext.SaveChangesAsync();
 
-                return userTask;
+                return mAdminEditUserTask;
             }
             else
             {
-                userTask.TTitle = "Title Not Found";
-                return userTask;
+                mAdminEditUserTask.TTitle = "Title Not Found";
+                return mAdminEditUserTask;
             }
         }
 
