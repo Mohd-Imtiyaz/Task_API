@@ -12,7 +12,7 @@ namespace Task_API.Interfaces
 
         Task<MAddingTask> AddTaskForUser(MAddingTask mAddingTask, string userName);
 
-        Task<List<TUserTask>> SearchingWithAnyType(string searchQuery, string loggedinUser, bool isAccending);
+        Task<List<TUserTask>> SearchingWithAnyType(string searchQuery, string loggedinUser);
 
         Task<MUpdatingTask> UpdateTask(MUpdatingTask mUpdatingTask, string taskTitle, string loggedInUser);
 

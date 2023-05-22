@@ -8,7 +8,10 @@ using Task_API.Services;
 
 namespace Task_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
+    [ApiVersion("3.0")]
     [ApiController]
     public class LoginController : ControllerBase
     {

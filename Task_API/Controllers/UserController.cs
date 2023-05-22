@@ -9,8 +9,11 @@ using Task_API.Model;
 
 namespace Task_API.Controllers
 {
-    [Authorize]
-    [Route("api/Admin")]
+    [Authorize(Roles = "Admin")]
+    [Route("api/v{version:apiVersion}/Admin")]
+    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
+    [ApiVersion("3.0")]
     [ApiController]
     public class UserController : ControllerBase
     {

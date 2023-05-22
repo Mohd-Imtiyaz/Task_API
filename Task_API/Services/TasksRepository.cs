@@ -24,16 +24,13 @@ namespace Task_API.Services
             return retrivedTask;
         }
 
-        public async Task<List<TUserTask>> SearchingWithAnyType(string searchQuery, string loggedinUser, bool isAccending)
+        public async Task<List<TUserTask>> SearchingWithAnyType(string searchQuery, string loggedinUser)
         {
             var UserTasks = await _taskDataBaseContext.TUserTasks.ToListAsync();
 
             var matchingTasks = UserTasks
                 .Where(m => m.TTitle.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) && m.TTaskCreater == loggedinUser)
                 .ToList();
-
-            matchingTasks = isAccending ? matchingTasks.OrderBy(m => m.TTitle).ToList() : matchingTasks.OrderByDescending(m => m.TTitle).ToList();
-
 
             return matchingTasks;
         }
