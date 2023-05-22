@@ -16,5 +16,7 @@ namespace Task_API.Interfaces
         Task<TUser> UpdateUserAccountByID(TUser user);
 
         Task<TUser> DeleteUser(int id);
+
+        Task<string> UserIsActiveOrNot(string userName);
     }
 }

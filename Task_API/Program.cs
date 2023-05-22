@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Task_API.DBContext;
 using Task_API.Interfaces;
+using Task_API.ManualClasses;
 using Task_API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -57,15 +59,6 @@ builder.Services.AddSwaggerGen(setupAction =>
         }
     });
 });
-
-//builder.Services.AddAuthorization(options =>
-//{
-//        options.AddPolicy("AdminOnly", policy =>
-//        policy.RequireRole("Admin"));
-//});
-
-
-
 // Add services to the container.
 
 builder.Services.AddControllers();

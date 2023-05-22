@@ -36,36 +36,47 @@ namespace Task_API.Controllers
         [Route("GetAllTasks")]
         public async Task<ActionResult<MPaginationParameters>> GetAllTasks(int page)
         {
-            try
+            string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin
+            var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
+            if (userIsValidOrNo == "Active")
             {
-
-                string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is logged in
-
-                var taskList = await _tasksRepository.GetAllTaskByPage(page, loggedinUser);
-
-                if (taskList == null)
+                try
                 {
-                    return StatusCode(404, "Data not found");
+
+                    //string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is logged in
+
+                    var taskList = await _tasksRepository.GetAllTaskByPage(page, loggedinUser);
+
+                    if (taskList == null)
+                    {
+                        return StatusCode(404, "Data not found");
+                    }
+                    else
+                    {
+                        return StatusCode(200, taskList);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return StatusCode(200, taskList);
+                    _logger.LogError(ex.Message);
+                    return StatusCode(500, "Internal Server Error...");
                 }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return StatusCode(500, "Internal Server Error...");
-            }
+            return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
         }
 
         [HttpGet("search")]
         public async Task<IActionResult> SearchTask(string searchQuery, bool assendingOrder)
         {
             string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin
-            var searchedTask = await _tasksRepository.SearchingWithAnyType(searchQuery, loggedinUser, assendingOrder);
-
-            return StatusCode(200, searchedTask);
+            var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
+            if (userIsValidOrNo == "Active")
+            {
+                //string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin
+                var searchedTask = await _tasksRepository.SearchingWithAnyType(searchQuery, loggedinUser, assendingOrder);
+                return StatusCode(200, searchedTask);
+            }
+            return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
         }
 
 
@@ -73,25 +84,31 @@ namespace Task_API.Controllers
         [Route("AddTask")]
         public async Task<ActionResult<MAddingTask>> AddTask(MAddingTask mAddingTask)
         {
-            try
+            string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin
+            var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
+            if (userIsValidOrNo == "Active")
             {
-
-                string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin 
-
-                var existingTask = await _tasksRepository.GetTasksByTitle(mAddingTask.TTitle);
-                if (existingTask != null)
-                if (existingTask != null)
+                try
                 {
-                    return Conflict("Task already Exists");
+
+                    //string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin 
+
+                    var existingTask = await _tasksRepository.GetTasksByTitle(mAddingTask.TTitle);
+                    if (existingTask != null)
+                        if (existingTask != null)
+                        {
+                            return Conflict("Task already Exists");
+                        }
+                    var userAddTask = await _tasksRepository.AddTaskForUser(mAddingTask, loggedinUser);
+                    return CreatedAtAction(nameof(AddTask), userAddTask);
                 }
-                var userAddTask = await _tasksRepository.AddTaskForUser(mAddingTask, loggedinUser);
-                return CreatedAtAction(nameof(AddTask), userAddTask);
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return StatusCode(500, "Internal Server Error...");
+                }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return StatusCode(500, "Internal Server Error...");
-            }
+            return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
         }
 
         [HttpPut]
@@ -99,17 +116,22 @@ namespace Task_API.Controllers
         public async Task<ActionResult<MUpdatingTask>> UpdateTask(MUpdatingTask mUpdatingTask, string Title_Name)
         {
             string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin 
+            var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
+            if (userIsValidOrNo == "Active")
+            {
+                try
+                {
+                    var updatingTask = await _tasksRepository.UpdateTask(mUpdatingTask, Title_Name, loggedinUser);
+                    return StatusCode(404, "Data not found...");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return StatusCode(500, "Internal Server Error...");
+                }
+            }
+            return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
 
-            try
-            {
-                var updatingTask = await _tasksRepository.UpdateTask(mUpdatingTask, Title_Name, loggedinUser);
-                return StatusCode(404, "Data not found...");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return StatusCode(500, "Internal Server Error...");
-            }
         }
 
         [HttpDelete]
@@ -117,17 +139,22 @@ namespace Task_API.Controllers
         public async Task<ActionResult> DeleteTask(string title)
         {
             string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin 
+            var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
+            if (userIsValidOrNo == "Active")
+            {
+                try
+                {
+                    var delTask = _tasksRepository.DeletingTask(title, loggedinUser);
+                    return StatusCode(200, "Task deleted succesfully");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return StatusCode(500, "Internal Server Error...");
+                }
+            }
+            return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
 
-            try
-            {
-                var delTask = _tasksRepository.DeletingTask(title, loggedinUser);
-                return StatusCode(200, "Task deleted succesfully");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return StatusCode(500, "Internal Server Error...");
-            }
         }
 
     }

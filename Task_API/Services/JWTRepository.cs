@@ -37,7 +37,7 @@ namespace Task_API.Services
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
 
-                        new Claim("UserName", user.UName),
+                        new Claim("UserName", user.UUserName),
                         new Claim("Email", user.UEmail),
                         new Claim("Name", user.UName),
                         new Claim(ClaimTypes.Role, user.Roles),
@@ -83,7 +83,7 @@ namespace Task_API.Services
         }
         private ActionResult<TUser> ValidateUserCredential(string? Username, string? password)
         {
-            var userCred = _taskDataBaseContext.TUsers.Where(u => u.UName == Username && u.UPassword == password).FirstOrDefault();
+            var userCred = _taskDataBaseContext.TUsers.Where(u => u.UName == Username && u.UPassword == password && u.ActiveStatus == "Active").FirstOrDefault();
             if (userCred == null)
             {
                 throw new ArgumentException("Invlaid password");

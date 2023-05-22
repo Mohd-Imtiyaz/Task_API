@@ -89,6 +89,19 @@ namespace Task_API.Services
             _taskDataBaseContext.SaveChangesAsync();
             return delUser;
         }
+
+
+        // if posible change to bool field
+        public async Task<string> UserIsActiveOrNot(string userName)
+        {
+            var getUser = await _taskDataBaseContext.TUsers.Where(u => u.UUserName  == userName).FirstOrDefaultAsync();
+            //string isUserActive = getUser.ActiveStatus;
+            if(getUser.ActiveStatus == "Active")
+            {
+                return "Active";
+            }
+            return "UserIsNotActive";
+        }
     }
 }
 
