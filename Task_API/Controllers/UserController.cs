@@ -9,7 +9,7 @@ using Task_API.Model;
 
 namespace Task_API.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [Route("api/v{version:apiVersion}/Admin")]
     [ApiVersion("1.0")]
     [ApiVersion("2.0")]

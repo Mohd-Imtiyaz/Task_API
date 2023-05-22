@@ -9,7 +9,7 @@ namespace Task_API.ManualClasses
         public string? UName { get; set; }
 
         [Required(ErrorMessage = "UserName is Required")]
-        [MinLength(10, ErrorMessage = "AName must be at least 10 character long")]
+        [MinLength(8, ErrorMessage = "AName must be at least 10 character long")]
         public string? UUserName { get; set; }
 
         [Required(ErrorMessage = "Password is Required")]
