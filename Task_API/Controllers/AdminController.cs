@@ -12,6 +12,7 @@ namespace Task_API.Controllers
 {
     [Authorize(Roles = "Admin, User")]
     [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("2.0")]
     [ApiVersion("3.0")]
     [ApiController]
     public class AdminController : ControllerBase
@@ -143,6 +144,37 @@ namespace Task_API.Controllers
                 {
                     var reassingning = await _adminRepository.ReAssignTask(titleToAssign, newUser);
                     return StatusCode(202, "Task Re Assigned Successfully...");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return StatusCode(500, "Internal Server Error...");
+                }
+            }
+            return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
+        }
+
+        [HttpPut]
+        [Route("UpdatingUserStatus")]
+        public async Task<ActionResult> UserStatusUpdate(string userName, bool setStatusTo)
+        {
+            string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin
+            var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
+            if (userIsValidOrNo == "Active")
+            {
+                try
+                {
+                    if(setStatusTo == true)
+                    {
+                        var userStatus = "Active";
+                        var userNewStatus = await _adminRepository.UserStatusUpdate(userName, userStatus);
+                    }
+                    else
+                    {
+                        var userStatus = "Disabled";
+                        var userNewStatus = await _adminRepository.UserStatusUpdate(userName, userStatus);
+                    }
+                    return StatusCode(200, "User status updated Sucessfully...");
                 }
                 catch (Exception ex)
                 {

@@ -15,6 +15,8 @@ namespace Task_API.Interfaces
 
         Task<TUserTask> ReAssignTask(string taskTitle, string assigningToUserName);
 
+        Task<TUser> UserStatusUpdate(string userName, string userStatus);
+
         Task<TUserTask> DeletingTask(string title);
     }
 }

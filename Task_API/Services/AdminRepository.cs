@@ -83,6 +83,18 @@ namespace Task_API.Services
             return updatingTaskCreator;
         }
 
+        public async Task<TUser> UserStatusUpdate(string userName, string userStatus)
+        {
+            var updatingUserStatus = await _taskDataBaseContext.TUsers.Where(u => u.UUserName == userName).FirstOrDefaultAsync();
+
+            updatingUserStatus.ActiveStatus = userStatus;
+
+            _taskDataBaseContext.TUsers.Update(updatingUserStatus);
+            _taskDataBaseContext.SaveChangesAsync();
+
+            return updatingUserStatus;
+        }
+
         public async Task<TUserTask> DeletingTask(string title)
         {
             var taskToDelete = await _taskDataBaseContext.TUserTasks.Where(u => u.TTitle == title).FirstOrDefaultAsync();

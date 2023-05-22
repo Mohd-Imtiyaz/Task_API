@@ -29,7 +29,7 @@ namespace Task_API.Services
             if (user != null)
             {
                 var resultLoginCheck = _taskDataBaseContext.TUsers
-                   .Where(e => e.UName == user.UName && e.UPassword == user.UPassword)
+                   .Where(e => e.UName == user.UName && e.UPassword == user.UPassword && e.ActiveStatus == "Active")
                    .FirstOrDefault();
 
                 var claims = new[] {
