@@ -34,6 +34,10 @@ namespace Task_API.Controllers
 
                 if (mLogin == null || string.IsNullOrEmpty(user.UUserName) || string.IsNullOrEmpty(user.UPassword))
                 {
+                    if(user.ActiveStatus != "Active")
+                    {
+                        return BadRequest("You are inactive user...");
+                    }
                     return BadRequest("Invalid username or password");
                 }
                 var user1 = await _userRepository.GetUserByName(user.UUserName);
@@ -42,7 +46,7 @@ namespace Task_API.Controllers
 
                 if (userindata.UPassword != hashedPassword.UPassword)
                 {
-                    return BadRequest("Invalid Username or password");
+                    return BadRequest("Invalid password");
                 }
                 var Token = await _jwtRepository.TokenGenerate(user1);
                 return StatusCode(201, Token);
