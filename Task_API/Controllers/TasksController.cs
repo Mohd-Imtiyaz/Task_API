@@ -12,8 +12,9 @@ using Task_API.Services;
 namespace Task_API.Controllers
 {
     [Authorize]
-
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("2.0")]
+    [ApiVersion("3.0")]
     [ApiController]
     public class TasksController : ControllerBase
     {
@@ -66,14 +67,14 @@ namespace Task_API.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> SearchTask(string searchQuery, bool assendingOrder)
+        public async Task<IActionResult> SearchTask(string searchQuery)
         {
             string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin
             var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
             if (userIsValidOrNo == "Active")
             {
                 //string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin
-                var searchedTask = await _tasksRepository.SearchingWithAnyType(searchQuery, loggedinUser, assendingOrder);
+                var searchedTask = await _tasksRepository.SearchingWithAnyType(searchQuery, loggedinUser);
                 return StatusCode(200, searchedTask);
             }
             return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
@@ -122,7 +123,7 @@ namespace Task_API.Controllers
                 try
                 {
                     var updatingTask = await _tasksRepository.UpdateTask(mUpdatingTask, Title_Name, loggedinUser);
-                    return StatusCode(404, "Data not found...");
+                    return StatusCode(200, "Data Updated Sucessfully");
                 }
                 catch (Exception ex)
                 {

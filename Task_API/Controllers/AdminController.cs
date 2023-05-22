@@ -11,7 +11,8 @@ using Task_API.Services;
 namespace Task_API.Controllers
 {
     [Authorize(Roles = "Admin, User")]
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("3.0")]
     [ApiController]
     public class AdminController : ControllerBase
     {
@@ -36,7 +37,7 @@ namespace Task_API.Controllers
         {
             string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin
             var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
-            if (userIsValidOrNo == "Activea")
+            if (userIsValidOrNo == "Active")
             {
 
                 try
