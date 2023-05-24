@@ -52,7 +52,7 @@ namespace Task_API.Controllers
                     return BadRequest("Invalid password");
                 }
                 var Token = await _jwtRepository.TokenGenerate(user1);
-                return StatusCode(201, Token);
+                return StatusCode(200, Token);
             }
             catch (Exception ex)
             {

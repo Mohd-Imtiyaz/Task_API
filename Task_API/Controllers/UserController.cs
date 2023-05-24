@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using Task_API.DBContext;
 using Task_API.Interfaces;
 using Task_API.ManualClasses;
@@ -9,8 +10,8 @@ using Task_API.Model;
 
 namespace Task_API.Controllers
 {
-    //[Authorize(Roles = "Admin")]
-    [Route("api/v{version:apiVersion}/Admin")]
+    [Authorize(Roles = "Admin")]
+    [Route("api/v{version:apiVersion}/[controller]")] 
     [ApiVersion("1.0")]
     [ApiVersion("2.0")]
     [ApiVersion("3.0")]
@@ -33,21 +34,32 @@ namespace Task_API.Controllers
         [Route("AddUser")]
         public async Task<ActionResult<MUser>> AddUser(MUser muser)
         {
-            var userRoles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+            //var userRoles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
             string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin 
             var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
             if (userIsValidOrNo == "Active")
             {
                 try
                 {
-                    var existingUser = await _userRepository.GetUserByName(muser.UUserName);
-                    if (existingUser != null)
+                    string strRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" + @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" + @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+                    Regex re = new Regex(strRegex);
+                    if (re.IsMatch(muser.UEmail))
                     {
-                        return Conflict("Username already exixts...");
+                        var existingUser = await _userRepository.GetUserByName(muser.UUserName);
+                        if (existingUser != null)
+                        {
+                            return Conflict("Username already exixts...");
+                        }
+                        var addingUser = await _userRepository.AddUserAccount(muser);
+                        await _taskDataBaseContext.SaveChangesAsync();
+                        return CreatedAtAction(nameof(AddUser), addingUser);
                     }
-                    var addingUser = await _userRepository.AddUserAccount(muser);
-                    await _taskDataBaseContext.SaveChangesAsync();
-                    return CreatedAtAction(nameof(AddUser), addingUser);
+                    else
+                    {
+                        return StatusCode(400, "enter a valid Email");
+                    }
+
+                    
                 }
                 catch (Exception ex)
                 {

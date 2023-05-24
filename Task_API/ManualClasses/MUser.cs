@@ -20,6 +20,7 @@ namespace Task_API.ManualClasses
         public string? Roles { get; set; }
 
         [Required(ErrorMessage = "Email is Required")]
+        [EmailAddress(ErrorMessage = "Provide a propper Email address")]
         public string? UEmail { get; set; }
 
         [Required(ErrorMessage = "ActiveStatus is Required")]

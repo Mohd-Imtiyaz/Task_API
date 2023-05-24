@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using Task_API.DBContext;
 using Task_API.Interfaces;
 using Task_API.ManualClasses;
@@ -64,6 +66,7 @@ namespace Task_API.Services
 
             return muser;
         }
+
 
         // This meathod is used to update a user by ID
         public async Task<TUser> UpdateUserAccountByID(TUser user)

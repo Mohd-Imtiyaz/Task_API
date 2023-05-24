@@ -11,7 +11,7 @@ using Task_API.Services;
 
 namespace Task_API.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin, User")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("2.0")]
     [ApiVersion("3.0")]

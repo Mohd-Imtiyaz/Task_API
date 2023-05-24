@@ -10,7 +10,7 @@ using Task_API.Services;
 
 namespace Task_API.Controllers
 {
-    [Authorize(Roles = "Admin, User")]
+    [Authorize(Roles = "Admin")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("2.0")]
     [ApiVersion("3.0")]
@@ -32,6 +32,8 @@ namespace Task_API.Controllers
             _userRepository = userRepository;
         }
 
+
+        // This function allows you to 
         [HttpGet]
         [Route("GetAllTasks")]
         public async Task<ActionResult> GetAllTasks(bool isAccending)
