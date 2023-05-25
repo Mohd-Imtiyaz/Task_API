@@ -29,7 +29,14 @@ namespace Task_API.Controllers
             _userRepository = userRepository;
             _logger = logger;
         }
+        
 
+
+        /// <summary>
+        /// Adding the User
+        /// </summary>
+        /// <param name="muser"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddUser")]
         public async Task<ActionResult<MUser>> AddUser(MUser muser)
@@ -73,6 +80,12 @@ namespace Task_API.Controllers
 
 
 
+        /// <summary>
+        /// Getting the User with username
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+
         [HttpGet]
         [Route("GetValue")]
         [Authorize]
@@ -106,6 +119,12 @@ namespace Task_API.Controllers
         }
 
 
+
+        /// <summary>
+        /// Updating the User details
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("UpdateUser")]
         public async Task<ActionResult> updateuser(TUser user)
@@ -130,6 +149,12 @@ namespace Task_API.Controllers
         }
 
 
+
+        /// <summary>
+        /// Deleting the user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("DeleteUser")]
         public async Task<ActionResult> delUser(int id)

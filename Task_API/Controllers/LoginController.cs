@@ -27,7 +27,11 @@ namespace Task_API.Controllers
         }
 
 
-
+        /// <summary>
+        /// This API is used to login and generate the Token
+        /// </summary>
+        /// <param name="mLogin"></param>
+        /// <returns></returns>
         [HttpPost("Login")]
         public async Task<ActionResult<MLogin>> Login(MLogin mLogin)
         {

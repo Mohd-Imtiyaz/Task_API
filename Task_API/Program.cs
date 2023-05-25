@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text;
 using Task_API.DBContext;
 using Task_API.Interfaces;
@@ -39,6 +40,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 builder.Services.AddSwaggerGen(setupAction =>
 {
+
+    setupAction.SwaggerDoc("Task_APISpecification", new()
+    {
+        Title = "Task_API",
+        Version = "1"
+    });
+
+
+
+    var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml ";
+    var xmlCommentsFullPath = Path.Combine(
+    AppContext.BaseDirectory, xmlCommentsFile);
+
+    setupAction.IncludeXmlComments(xmlCommentsFullPath);
+
     setupAction.AddSecurityDefinition("Task_API", new OpenApiSecurityScheme()
     {
         Type = SecuritySchemeType.Http,
@@ -81,7 +97,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(setupAction =>
+    {
+        setupAction.SwaggerEndpoint("/swagger/Task_APISpecification/swagger.json", "Task_API");
+    });
 }
 
 app.UseHttpsRedirection();

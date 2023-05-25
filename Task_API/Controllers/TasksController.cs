@@ -32,7 +32,11 @@ namespace Task_API.Controllers
         }
 
         
-
+        /// <summary>
+        /// Getting all Tasks of loggedin User
+        /// </summary>
+        /// <param name="page"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetAllTasks")]
         public async Task<ActionResult<MPaginationParameters>> GetAllTasks(int page)
@@ -66,6 +70,12 @@ namespace Task_API.Controllers
             return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
         }
 
+
+        /// <summary>
+        /// Searching Task with help of Title (also excepts similar string)
+        /// </summary>
+        /// <param name="searchQuery"></param>
+        /// <returns></returns>
         [HttpGet("search")]
         public async Task<IActionResult> SearchTask(string searchQuery)
         {
@@ -81,6 +91,11 @@ namespace Task_API.Controllers
         }
 
 
+        /// <summary>
+        /// Adding Task which will be assinged to the Loggedin user
+        /// </summary>
+        /// <param name="mAddingTask"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddTask")]
         public async Task<ActionResult<MAddingTask>> AddTask(MAddingTask mAddingTask)
@@ -112,6 +127,13 @@ namespace Task_API.Controllers
             return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
         }
 
+
+        /// <summary>
+        /// Updating Task of the user 
+        /// </summary>
+        /// <param name="mUpdatingTask"></param>
+        /// <param name="Title_Name"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("UpdateTask")]
         public async Task<ActionResult<MUpdatingTask>> UpdateTask(MUpdatingTask mUpdatingTask, string Title_Name)
@@ -135,6 +157,13 @@ namespace Task_API.Controllers
 
         }
 
+
+
+        /// <summary>
+        /// Deleting the tasks of the user
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("DeleteTask")]
         public async Task<ActionResult> DeleteTask(string title)

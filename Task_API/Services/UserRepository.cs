@@ -57,9 +57,9 @@ namespace Task_API.Services
             adduser.UName = muser.UName;
             adduser.UUserName = muser.UUserName;
             adduser.UPassword = hashedpassword.UPassword;
-            adduser.Roles = muser.Roles;
+            adduser.Roles = "User";
             adduser.UEmail = muser.UEmail;
-            adduser.ActiveStatus = muser.ActiveStatus;
+            adduser.ActiveStatus = "Active";
 
             await _taskDataBaseContext.TUsers.AddAsync(adduser);
             await _taskDataBaseContext.SaveChangesAsync();
