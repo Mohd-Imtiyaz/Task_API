@@ -18,12 +18,16 @@ namespace Task_API.Services
             _userRepository = userRepository;
         }
 
+
+
         public async Task<TUserTask> GetTasksByTitle(string title)
         {
             var retrivedTask = await _taskDataBaseContext.TUserTasks.Where(u => u.TTitle == title).FirstOrDefaultAsync();
             return retrivedTask;
         }
 
+
+        
         public async Task<List<TUserTask>> SearchingWithAnyType(string searchQuery, string loggedinUser)
         {
             var UserTasks = await _taskDataBaseContext.TUserTasks.ToListAsync();
@@ -43,17 +47,19 @@ namespace Task_API.Services
         }
 
 
+
+        
         // start
-        public async Task<MPaginationParameters> GetAllTaskByPage(int page, string loggedinUser)
+        public async Task<MPaginationParameters> GetAllTaskByPage(int page, string loggedinUser,float PageResults)
         {
-            var PageResults = 4f; //2 content in 1 page
+            //var PageResults = x; 
             var PageCount = Math.Ceiling(_taskDataBaseContext.TUserTasks.Where(u => u.TTaskCreater == loggedinUser).Count() / PageResults);
 
-            var Blog = await _taskDataBaseContext.TUserTasks.Skip((page - 1) * (int)PageResults).Take((int)PageResults).ToListAsync();
+            var task = await _taskDataBaseContext.TUserTasks.Skip((page - 1) * (int)PageResults).Take((int)PageResults).Where(u => u.TTaskCreater == loggedinUser).ToListAsync();
 
             var response = new MPaginationParameters
             {
-                AllTasks = Blog,
+                AllTasks = task,
                 CurrentPage = page,
                 Pages = (int)PageCount
             };

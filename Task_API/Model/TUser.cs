@@ -17,7 +17,7 @@ public partial class TUser
     public string? UUserName { get; set; }
 
     [Required(ErrorMessage = "Password is Required")]
-    [MinLength(8, ErrorMessage = "Password must be at least 8 character long")]
+    [EmailAddress(ErrorMessage = "Provide a propper Email address")]
     public string? UPassword { get; set; }
 
     [Required(ErrorMessage = "Roles is Required")]

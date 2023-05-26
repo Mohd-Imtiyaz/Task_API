@@ -27,7 +27,11 @@ namespace Task_API.Controllers
         }
 
 
-
+        /// <summary>
+        /// This API is used to login and generate the Token
+        /// </summary>
+        /// <param name="mLogin"></param>
+        /// <returns></returns>
         [HttpPost("Login")]
         public async Task<ActionResult<MLogin>> Login(MLogin mLogin)
         {
@@ -52,7 +56,7 @@ namespace Task_API.Controllers
                     return BadRequest("Invalid password");
                 }
                 var Token = await _jwtRepository.TokenGenerate(user1);
-                return StatusCode(201, Token);
+                return StatusCode(200, Token);
             }
             catch (Exception ex)
             {

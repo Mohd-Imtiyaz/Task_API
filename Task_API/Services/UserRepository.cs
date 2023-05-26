@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using Task_API.DBContext;
 using Task_API.Interfaces;
 using Task_API.ManualClasses;
@@ -55,15 +57,16 @@ namespace Task_API.Services
             adduser.UName = muser.UName;
             adduser.UUserName = muser.UUserName;
             adduser.UPassword = hashedpassword.UPassword;
-            adduser.Roles = muser.Roles;
+            adduser.Roles = "User";
             adduser.UEmail = muser.UEmail;
-            adduser.ActiveStatus = muser.ActiveStatus;
+            adduser.ActiveStatus = "Active";
 
             await _taskDataBaseContext.TUsers.AddAsync(adduser);
             await _taskDataBaseContext.SaveChangesAsync();
 
             return muser;
         }
+
 
         // This meathod is used to update a user by ID
         public async Task<TUser> UpdateUserAccountByID(TUser user)

@@ -7,7 +7,8 @@ namespace Task_API.Interfaces
     {
         Task<TUserTask> GetTasksByTitle(string title);
 
-        Task<MPaginationParameters> GetAllTaskByPage(int page, string userName);
+        Task<MPaginationParameters> GetAllTaskByPage(int page, string loggedinUser, float PageResults);
+
         Task<IEnumerable<TUserTask>> GetAllTasksOfUser(string userName);
 
         Task<MAddingTask> AddTaskForUser(MAddingTask mAddingTask, string userName);

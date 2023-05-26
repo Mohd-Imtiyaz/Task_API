@@ -21,7 +21,7 @@ namespace Task_API.Services
 
             allTask = isAccending ? allTask.OrderByDescending(m => m.TTitle).ToList() : allTask.OrderBy(m => m.TTitle).ToList();
 
-            return allTask;
+            return allTask;  
         }
 
 

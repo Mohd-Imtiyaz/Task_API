@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Task_API</name>
+    </assembly>
+    <members>
+        <member name="M:Task_API.Controllers.AdminController.GetAllTasks(System.Boolean)">
+            <summary>
+            Gets all Tasks created is selected order
+            </summary>
+            <param name="isDesending"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.AdminController.GetAllTaskOfUser(System.String)">
+            <summary>
+            Getting all tasks of the perticular user
+            </summary>
+            <param name="userName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.AdminController.SearchingFromTitle(System.String)">
+            <summary>
+            Retriving the Task by providing Task Title
+            </summary>
+            <param name="title"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.AdminController.UpdatingTask(Task_API.ManualClasses.MAdminEditUserTask,System.String)">
+            <summary>
+            Updating any Task by providing the Title
+            </summary>
+            <param name="mAdminEditUserTask"></param>
+            <param name="titleToBeUpdated"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.AdminController.ReAssignTaskToUser(System.String,System.String)">
+            <summary>
+            Reassigning the Task to any User
+            </summary>
+            <param name="titleToAssign"></param>
+            <param name="newUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.AdminController.UserStatusUpdate(System.String,System.Boolean)">
+            <summary>
+            Updating the user status
+            </summary>
+            <param name="userName"></param>
+            <param name="setStatusTo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.AdminController.DeleteTask(System.String)">
+            <summary>
+            Deleting a task by providing the title
+            </summary>
+            <param name="taskTitle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.LoginController.Login(Task_API.ManualClasses.MLogin)">
+            <summary>
+            This API is used to login and generate the Token
+            </summary>
+            <param name="mLogin"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.TasksController.GetAllTasks(System.Int32,System.Single)">
+            <summary>
+            Getting all Tasks of loggedin User
+            </summary>
+            <param name="page"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.TasksController.SearchTask(System.String)">
+            <summary>
+            Searching Task with help of Title (also excepts similar string)
+            </summary>
+            <param name="searchQuery"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.TasksController.AddTask(Task_API.ManualClasses.MAddingTask)">
+            <summary>
+            Adding Task which will be assinged to the Loggedin user
+            </summary>
+            <param name="mAddingTask"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.TasksController.UpdateTask(Task_API.ManualClasses.MUpdatingTask,System.String)">
+            <summary>
+            Updating Task of the user 
+            </summary>
+            <param name="mUpdatingTask"></param>
+            <param name="Title_Name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.TasksController.DeleteTask(System.String)">
+            <summary>
+            Deleting the tasks of the user
+            </summary>
+            <param name="title"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.UserController.AddUser(Task_API.ManualClasses.MUser)">
+            <summary>
+            Adding the User
+            </summary>
+            <param name="muser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.UserController.getvalue(System.String)">
+            <summary>
+            Getting the User with username
+            </summary>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.UserController.updateuser(Task_API.Model.TUser)">
+            <summary>
+            Updating the User details
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Task_API.Controllers.UserController.delUser(System.Int32)">
+            <summary>
+            Deleting the user
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

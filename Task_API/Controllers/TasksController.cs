@@ -11,7 +11,7 @@ using Task_API.Services;
 
 namespace Task_API.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin, User")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("2.0")]
     [ApiVersion("3.0")]
@@ -32,10 +32,14 @@ namespace Task_API.Controllers
         }
 
         
-
+        /// <summary>
+        /// Getting all Tasks of loggedin User
+        /// </summary>
+        /// <param name="page"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetAllTasks")]
-        public async Task<ActionResult<MPaginationParameters>> GetAllTasks(int page)
+        public async Task<ActionResult<MPaginationParameters>> GetAllTasks(int page, float recordsPerPage)
         {
             string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin
             var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
@@ -46,7 +50,7 @@ namespace Task_API.Controllers
 
                     //string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is logged in
 
-                    var taskList = await _tasksRepository.GetAllTaskByPage(page, loggedinUser);
+                    var taskList = await _tasksRepository.GetAllTaskByPage(page, loggedinUser, recordsPerPage);
 
                     if (taskList == null)
                     {
@@ -66,6 +70,12 @@ namespace Task_API.Controllers
             return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
         }
 
+
+        /// <summary>
+        /// Searching Task with help of Title (also excepts similar string)
+        /// </summary>
+        /// <param name="searchQuery"></param>
+        /// <returns></returns>
         [HttpGet("search")]
         public async Task<IActionResult> SearchTask(string searchQuery)
         {
@@ -81,6 +91,11 @@ namespace Task_API.Controllers
         }
 
 
+        /// <summary>
+        /// Adding Task which will be assinged to the Loggedin user
+        /// </summary>
+        /// <param name="mAddingTask"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddTask")]
         public async Task<ActionResult<MAddingTask>> AddTask(MAddingTask mAddingTask)
@@ -109,9 +124,16 @@ namespace Task_API.Controllers
                     return StatusCode(500, "Internal Server Error...");
                 }
             }
-            return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
+            return StatusCode(404, "Your status is Inactive please contact Adminstration...");
         }
 
+
+        /// <summary>
+        /// Updating Task of the user 
+        /// </summary>
+        /// <param name="mUpdatingTask"></param>
+        /// <param name="Title_Name"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("UpdateTask")]
         public async Task<ActionResult<MUpdatingTask>> UpdateTask(MUpdatingTask mUpdatingTask, string Title_Name)
@@ -135,6 +157,13 @@ namespace Task_API.Controllers
 
         }
 
+
+
+        /// <summary>
+        /// Deleting the tasks of the user
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("DeleteTask")]
         public async Task<ActionResult> DeleteTask(string title)

@@ -16,13 +16,8 @@ namespace Task_API.ManualClasses
         [MinLength(8, ErrorMessage = "Password must be at least 8 character long")]
         public string? UPassword { get; set; }
 
-        [Required(ErrorMessage = "Roles is Required")]
-        public string? Roles { get; set; }
-
         [Required(ErrorMessage = "Email is Required")]
+        [EmailAddress(ErrorMessage = "Provide a propper Email address")]
         public string? UEmail { get; set; }
-
-        [Required(ErrorMessage = "ActiveStatus is Required")]
-        public string? ActiveStatus { get; set; }
     }
 }

@@ -10,7 +10,7 @@ using Task_API.Services;
 
 namespace Task_API.Controllers
 {
-    [Authorize(Roles = "Admin, User")]
+    [Authorize(Roles = "Admin")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("2.0")]
     [ApiVersion("3.0")]
@@ -32,9 +32,15 @@ namespace Task_API.Controllers
             _userRepository = userRepository;
         }
 
+        /// <summary>
+        /// Gets all Tasks created is selected order
+        /// </summary>
+        /// <param name="isDesending"></param>
+        /// <returns></returns>
+        // This function allows you to 
         [HttpGet]
         [Route("GetAllTasks")]
-        public async Task<ActionResult> GetAllTasks(bool isAccending)
+        public async Task<ActionResult> GetAllTasks(bool isDesending)
         {
             string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin
             var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
@@ -43,7 +49,7 @@ namespace Task_API.Controllers
 
                 try
                 {
-                    var allTasks = await _adminRepository.GetAllTasks(isAccending);
+                    var allTasks = await _adminRepository.GetAllTasks(isDesending);
                     return StatusCode(200, allTasks);
                 }
                 catch (Exception ex)
@@ -56,6 +62,12 @@ namespace Task_API.Controllers
 
         }
 
+
+        /// <summary>
+        /// Getting all tasks of the perticular user
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetAllTaskOfUser")]
         public async Task<ActionResult> GetAllTaskOfUser(string userName)
@@ -86,6 +98,12 @@ namespace Task_API.Controllers
 
         }
 
+
+        /// <summary>
+        /// Retriving the Task by providing Task Title
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("SearchingFromTitle")]
         public async Task<ActionResult> SearchingFromTitle(string title)
@@ -109,6 +127,14 @@ namespace Task_API.Controllers
             return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
         }
 
+
+
+        /// <summary>
+        /// Updating any Task by providing the Title
+        /// </summary>
+        /// <param name="mAdminEditUserTask"></param>
+        /// <param name="titleToBeUpdated"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("UpdatingTask")]
         public async Task<ActionResult<MAdminEditUserTask>> UpdatingTask(MAdminEditUserTask mAdminEditUserTask, string titleToBeUpdated)
@@ -132,6 +158,13 @@ namespace Task_API.Controllers
         }
 
 
+
+        /// <summary>
+        /// Reassigning the Task to any User
+        /// </summary>
+        /// <param name="titleToAssign"></param>
+        /// <param name="newUser"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("ReAssignTaskToUser")]
         public async Task<ActionResult> ReAssignTaskToUser(string titleToAssign, string newUser)
@@ -154,6 +187,14 @@ namespace Task_API.Controllers
             return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
         }
 
+
+
+        /// <summary>
+        /// Updating the user status
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="setStatusTo"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("UpdatingUserStatus")]
         public async Task<ActionResult> UserStatusUpdate(string userName, bool setStatusTo)
@@ -185,6 +226,13 @@ namespace Task_API.Controllers
             return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
         }
 
+
+
+        /// <summary>
+        /// Deleting a task by providing the title
+        /// </summary>
+        /// <param name="taskTitle"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("DeleteTask")]
         public async Task<ActionResult> DeleteTask(string taskTitle)
