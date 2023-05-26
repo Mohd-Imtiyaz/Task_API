@@ -63,7 +63,7 @@
             <param name="mLogin"></param>
             <returns></returns>
         </member>
-        <member name="M:Task_API.Controllers.TasksController.GetAllTasks(System.Int32)">
+        <member name="M:Task_API.Controllers.TasksController.GetAllTasks(System.Int32,System.Single)">
             <summary>
             Getting all Tasks of loggedin User
             </summary>

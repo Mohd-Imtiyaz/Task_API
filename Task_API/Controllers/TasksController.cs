@@ -39,7 +39,7 @@ namespace Task_API.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("GetAllTasks")]
-        public async Task<ActionResult<MPaginationParameters>> GetAllTasks(int page)
+        public async Task<ActionResult<MPaginationParameters>> GetAllTasks(int page, float recordsPerPage)
         {
             string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin
             var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
@@ -50,7 +50,7 @@ namespace Task_API.Controllers
 
                     //string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is logged in
 
-                    var taskList = await _tasksRepository.GetAllTaskByPage(page, loggedinUser);
+                    var taskList = await _tasksRepository.GetAllTaskByPage(page, loggedinUser, recordsPerPage);
 
                     if (taskList == null)
                     {
@@ -124,7 +124,7 @@ namespace Task_API.Controllers
                     return StatusCode(500, "Internal Server Error...");
                 }
             }
-            return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
+            return StatusCode(404, "Your status is Inactive please contact Adminstration...");
         }
 
 
