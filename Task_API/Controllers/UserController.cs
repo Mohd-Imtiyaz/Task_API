@@ -42,7 +42,9 @@ namespace Task_API.Controllers
         public async Task<ActionResult<MUser>> AddUser(MUser muser)
         {
             //var userRoles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+
             string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin 
+
             var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
             if (userIsValidOrNo == "Active")
             {
@@ -160,6 +162,7 @@ namespace Task_API.Controllers
         public async Task<ActionResult> delUser(int id)
         {
             string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin 
+
             var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
             if (userIsValidOrNo == "Active")
             {
