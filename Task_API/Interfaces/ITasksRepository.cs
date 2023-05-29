@@ -11,12 +11,12 @@ namespace Task_API.Interfaces
 
         Task<IEnumerable<TUserTask>> GetAllTasksOfUser(string userName);
 
-        Task<MAddingTask> AddTaskForUser(MAddingTask mAddingTask, string userName);
+        Task<string> AddTaskForUser(MAddingTask mAddingTask, string userName);
 
         Task<List<TUserTask>> SearchingWithAnyType(string searchQuery, string loggedinUser);
 
-        Task<MUpdatingTask> UpdateTask(MUpdatingTask mUpdatingTask, string taskTitle, string loggedInUser);
+        Task<string> UpdateTask(MUpdatingTask mUpdatingTask, string taskTitle, string loggedInUser);
 
-        Task<TUserTask> DeletingTask(string title, string logedinUser);
+        Task<string> DeletingTask(string title, string logedinUser);
     }
 }

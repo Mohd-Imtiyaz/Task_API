@@ -58,7 +58,7 @@ namespace Task_API.Controllers
                     return StatusCode(500, "Internal Server Error...");
                 }
             }
-            return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
+            return StatusCode(404, "Your status is Inactive please contact Adminstration...");
 
         }
 
@@ -94,7 +94,7 @@ namespace Task_API.Controllers
                     return StatusCode(500, "Intrnal Server error...");
                 }
             }
-            return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
+            return StatusCode(404, "Your status is Inactive please contact Adminstration...");
 
         }
 
@@ -124,7 +124,7 @@ namespace Task_API.Controllers
                 }
 
             }
-            return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
+            return StatusCode(404, "Your status is Inactive please contact Adminstration...");
         }
 
 
@@ -154,7 +154,7 @@ namespace Task_API.Controllers
                     return StatusCode(500, "Internal Server Error...");
                 }
             }
-            return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
+            return StatusCode(404, "Your status is Inactive please contact Adminstration...");
         }
 
 
@@ -176,7 +176,7 @@ namespace Task_API.Controllers
                 try
                 {
                     var reassingning = await _adminRepository.ReAssignTask(titleToAssign, newUser);
-                    return StatusCode(202, "Task Re Assigned Successfully...");
+                    return StatusCode(202, reassingning);
                 }
                 catch (Exception ex)
                 {
@@ -184,7 +184,7 @@ namespace Task_API.Controllers
                     return StatusCode(500, "Internal Server Error...");
                 }
             }
-            return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
+            return StatusCode(404, "Your status is Inactive please contact Adminstrationn...");
         }
 
 
@@ -223,7 +223,7 @@ namespace Task_API.Controllers
                     return StatusCode(500, "Internal Server Error...");
                 }
             }
-            return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
+            return StatusCode(404, "Your status is Inactive please contact Adminstration...");
         }
 
 
@@ -252,7 +252,7 @@ namespace Task_API.Controllers
                     return StatusCode(500, "Internal Server Error...");
                 }
             }
-            return StatusCode(404, "Your status is Inactive please contact Adminstratio...");
+            return StatusCode(404, "Your status is Inactive please contact Adminstration...");
         }
 
     }

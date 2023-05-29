@@ -46,7 +46,7 @@ namespace Task_API.Services
             return matchingTasks;
         }
 
-        public async Task<MAdminEditUserTask> UpdatingTask(MAdminEditUserTask mAdminEditUserTask, string title)
+        public async Task<string> UpdatingTask(MAdminEditUserTask mAdminEditUserTask, string title)
         {
             var updateTask = await _taskDataBaseContext.TUserTasks.Where(u => u.TTitle == title).FirstOrDefaultAsync();
 
@@ -62,46 +62,56 @@ namespace Task_API.Services
                 _taskDataBaseContext.TUserTasks.Update(updateTask);
                 _taskDataBaseContext.SaveChangesAsync();
 
-                return mAdminEditUserTask;
+                return "Updated successfully...";
             }
             else
             {
-                mAdminEditUserTask.TTitle = "Title Not Found";
-                return mAdminEditUserTask;
+                return "Title not found...";
             }
         }
 
-        public async Task<TUserTask> ReAssignTask(string taskTitle, string assigningToUserName)
+        public async Task<string> ReAssignTask(string taskTitle, string assigningToUserName)
         {
             var updatingTaskCreator = await _taskDataBaseContext.TUserTasks.Where(u => u.TTitle == taskTitle).FirstOrDefaultAsync();
 
-            updatingTaskCreator.TTaskCreater = assigningToUserName;
+            if(updatingTaskCreator != null)
+            {
+                updatingTaskCreator.TTaskCreater = assigningToUserName;
 
-            _taskDataBaseContext.TUserTasks.Update(updatingTaskCreator);
-            _taskDataBaseContext.SaveChangesAsync();
+                _taskDataBaseContext.TUserTasks.Update(updatingTaskCreator);
+                _taskDataBaseContext.SaveChangesAsync();
 
-            return updatingTaskCreator;
+                return "Task Reassigned Successfully...";
+            }
+            return "Task Not found...";
         }
 
-        public async Task<TUser> UserStatusUpdate(string userName, string userStatus)
+        public async Task<string> UserStatusUpdate(string userName, string userStatus)
         {
             var updatingUserStatus = await _taskDataBaseContext.TUsers.Where(u => u.UUserName == userName).FirstOrDefaultAsync();
 
-            updatingUserStatus.ActiveStatus = userStatus;
+            if(updatingUserStatus != null)
+            {
+                updatingUserStatus.ActiveStatus = userStatus;
 
-            _taskDataBaseContext.TUsers.Update(updatingUserStatus);
-            _taskDataBaseContext.SaveChangesAsync();
-
-            return updatingUserStatus;
+                _taskDataBaseContext.TUsers.Update(updatingUserStatus);
+                _taskDataBaseContext.SaveChangesAsync();
+                return "Status updated";
+            }
+            return "User not found...";
         }
 
-        public async Task<TUserTask> DeletingTask(string title)
+        public async Task<string> DeletingTask(string title)
         {
             var taskToDelete = await _taskDataBaseContext.TUserTasks.Where(u => u.TTitle == title).FirstOrDefaultAsync();
 
-            _taskDataBaseContext.TUserTasks.Remove(taskToDelete);
-            _taskDataBaseContext.SaveChangesAsync();
-            return taskToDelete;
+            if (taskToDelete != null)
+            {
+                _taskDataBaseContext.TUserTasks.Remove(taskToDelete);
+                _taskDataBaseContext.SaveChangesAsync();
+                return "Task deleted";
+            }
+            return "Task not found...";
         }
     }
 }

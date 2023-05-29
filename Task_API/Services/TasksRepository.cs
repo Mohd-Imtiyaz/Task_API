@@ -68,7 +68,7 @@ namespace Task_API.Services
         }
 
         // end
-        public async Task<MAddingTask> AddTaskForUser(MAddingTask mAddingTask, string userName) // may be i need to add a bool field in paramater
+        public async Task<string> AddTaskForUser(MAddingTask mAddingTask, string userName) // may be i need to add a bool field in paramater
         {
             var addUserTask = new TUserTask();
 
@@ -82,10 +82,10 @@ namespace Task_API.Services
             await _taskDataBaseContext.TUserTasks.AddAsync(addUserTask);
             await _taskDataBaseContext.SaveChangesAsync();
 
-            return mAddingTask;
+            return "Task added successfully";
         }
 
-        public async Task<MUpdatingTask> UpdateTask(MUpdatingTask mUpdatingTask, string taskTitle, string loggedInUser)
+        public async Task<string> UpdateTask(MUpdatingTask mUpdatingTask, string taskTitle, string loggedInUser)
         {
             var gettingUserTask = await _taskDataBaseContext.TUserTasks.Where(u => u.TTitle == taskTitle && u.TTaskCreater == loggedInUser).FirstOrDefaultAsync();
 
@@ -100,23 +100,25 @@ namespace Task_API.Services
                 _taskDataBaseContext.TUserTasks.Update(gettingUserTask);
                 _taskDataBaseContext.SaveChangesAsync();
 
-                return mUpdatingTask;
+                return "Changes saved successfully";
             }
             else
             {
-                mUpdatingTask.TTitle = "Title Not Found";
-                return mUpdatingTask;
+                return "Title not found";
             }
         }
 
-        public async Task<TUserTask> DeletingTask(string title, string logedinUser)
+        public async Task<string> DeletingTask(string title, string logedinUser)
         {
-
             var loggedinUserTasks = await _taskDataBaseContext.TUserTasks.Where(u => u.TTitle == title && u.TTaskCreater == logedinUser).FirstOrDefaultAsync();
 
-            _taskDataBaseContext.TUserTasks.Remove(loggedinUserTasks);
-            _taskDataBaseContext.SaveChangesAsync();
-            return loggedinUserTasks;
+            if(loggedinUserTasks != null)
+            {
+                _taskDataBaseContext.TUserTasks.Remove(loggedinUserTasks);
+                _taskDataBaseContext.SaveChangesAsync();
+                return "Task deleted...";
+            }
+            return "Task not found";
         }
     }
 }

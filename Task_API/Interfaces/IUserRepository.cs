@@ -11,11 +11,11 @@ namespace Task_API.Interfaces
 
         Task<TUser> GetUserByName(string Username);
 
-        Task<MUser> AddUserAccount(MUser muser);
+        Task<string> AddUserAccount(MUser muser);
 
-        Task<TUser> UpdateUserAccountByID(TUser user);
+        Task<string> UpdateUserAccountByID(TUser user);
 
-        Task<TUser> DeleteUser(int id);
+        Task<string> DeleteUser(int id);
 
         Task<string> UserIsActiveOrNot(string userName);
     }

@@ -48,7 +48,7 @@ namespace Task_API.Services
 
 
         // This meathod is used to add a new user
-        public async Task<MUser> AddUserAccount(MUser muser)
+        public async Task<string> AddUserAccount(MUser muser)
         {
             var hashedpassword = await HashingPasswordAsync(muser.UPassword);
             var adduser = new TUser();
@@ -64,33 +64,43 @@ namespace Task_API.Services
             await _taskDataBaseContext.TUsers.AddAsync(adduser);
             await _taskDataBaseContext.SaveChangesAsync();
 
-            return muser;
+            return "User Added successfully";
         }
 
 
         // This meathod is used to update a user by ID
-        public async Task<TUser> UpdateUserAccountByID(TUser user)
+        public async Task<string> UpdateUserAccountByID(TUser user)
         {
-            var hashingPassword = await HashingPasswordAsync(user.UPassword);
-
             var upuser = await _taskDataBaseContext.TUsers.Where(u => u.UId == user.UId).FirstOrDefaultAsync();
-            upuser.UName = user.UName;
-            upuser.UPassword = hashingPassword.UPassword;
-            upuser.Roles = user.Roles;
-            upuser.UEmail = user.UEmail;
-            upuser.ActiveStatus = user.ActiveStatus;
+            
+            if(upuser != null)
+            {
+                var hashingPassword = await HashingPasswordAsync(user.UPassword);
 
-            _taskDataBaseContext.TUsers.Update(upuser);
-            return upuser;
+                upuser.UName = user.UName;
+                upuser.UPassword = hashingPassword.UPassword;
+                upuser.Roles = user.Roles;
+                upuser.UEmail = user.UEmail;
+                upuser.ActiveStatus = user.ActiveStatus;
+
+                _taskDataBaseContext.TUsers.Update(upuser);
+                _taskDataBaseContext.SaveChangesAsync();
+                return "User Info updated";
+            }
+            return "User not found";
         }
 
         // This meathod is used to delete a user
-        public async Task<TUser> DeleteUser(int id)
+        public async Task<string> DeleteUser(int id)
         {
             var delUser = await _taskDataBaseContext.TUsers.Where(u => u.UId == id).FirstOrDefaultAsync();
-            _taskDataBaseContext.TUsers.Remove(delUser);
-            _taskDataBaseContext.SaveChangesAsync();
-            return delUser;
+            if (delUser != null)
+            {
+                _taskDataBaseContext.TUsers.Remove(delUser);
+                _taskDataBaseContext.SaveChangesAsync();
+                return "User Info updated";
+            }
+            return "User not found";
         }
 
 
