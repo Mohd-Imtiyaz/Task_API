@@ -48,7 +48,7 @@ namespace Task_API.Controllers
                 try
                 {
 
-                    //string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is logged in
+                    //string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is logged in 
 
                     var taskList = await _tasksRepository.GetAllTaskByPage(page, loggedinUser, recordsPerPage);
 

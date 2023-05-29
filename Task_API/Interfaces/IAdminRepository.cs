@@ -11,12 +11,12 @@ namespace Task_API.Interfaces
 
         Task<List<TUserTask>> SearchAnyTask(string searchQuery);
 
-        Task<MAdminEditUserTask> UpdatingTask(MAdminEditUserTask mAdminEditUserTask, string title);
+        Task<string> UpdatingTask(MAdminEditUserTask mAdminEditUserTask, string title);
 
-        Task<TUserTask> ReAssignTask(string taskTitle, string assigningToUserName);
+        Task<string> ReAssignTask(string taskTitle, string assigningToUserName);
 
-        Task<TUser> UserStatusUpdate(string userName, string userStatus);
+        Task<string> UserStatusUpdate(string userName, string userStatus);
 
-        Task<TUserTask> DeletingTask(string title);
+        Task<string> DeletingTask(string title);
     }
 }
