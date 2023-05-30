@@ -4,7 +4,7 @@
         <name>Task_API</name>
     </assembly>
     <members>
-        <member name="M:Task_API.Controllers.AdminController.GetAllTasks(System.Boolean)">
+        <member name="M:Task_API.Controllers.AdminController.GetAllTasks(System.Boolean,System.Int32,System.Single)">
             <summary>
             Gets all Tasks created is selected order
             </summary>
@@ -63,7 +63,7 @@
             <param name="mLogin"></param>
             <returns></returns>
         </member>
-        <member name="M:Task_API.Controllers.TasksController.GetAllTasks(System.Int32,System.Single)">
+        <member name="M:Task_API.Controllers.TasksController.GetAllTasks(System.Int32,System.Single,System.String)">
             <summary>
             Getting all Tasks of loggedin User
             </summary>

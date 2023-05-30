@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using Task_API.DBContext;
 using Task_API.Interfaces;
@@ -40,7 +42,7 @@ namespace Task_API.Controllers
         // This function allows you to 
         [HttpGet]
         [Route("GetAllTasks")]
-        public async Task<ActionResult> GetAllTasks(bool isDesending)
+        public async Task<ActionResult> GetAllTasks(bool isDesending, int page, float PageResults)
         {
             string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin
             var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
@@ -49,7 +51,7 @@ namespace Task_API.Controllers
 
                 try
                 {
-                    var allTasks = await _adminRepository.GetAllTasks(isDesending);
+                    var allTasks = await _adminRepository.GetAllTasks(isDesending, page, PageResults);
                     return StatusCode(200, allTasks);
                 }
                 catch (Exception ex)

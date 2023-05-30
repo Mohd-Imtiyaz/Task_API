@@ -7,7 +7,7 @@ namespace Task_API.Interfaces
     {
         Task<List<TUserTask>> GetAllTaskFromUsername(string username);
 
-        Task<IEnumerable<TUserTask>> GetAllTasks(bool isAccending);
+        Task<MPaginationParameters> GetAllTasks(bool isAccending, int page, float PageResults);
 
         Task<List<TUserTask>> SearchAnyTask(string searchQuery);
 

@@ -33,11 +33,13 @@ namespace Task_API.Services
             var UserTasks = await _taskDataBaseContext.TUserTasks.ToListAsync();
 
             var matchingTasks = UserTasks
-                .Where(m => m.TTitle.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) && m.TTaskCreater == loggedinUser)
+                .Where(m => m.TTitle.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) || m.TDescription.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) && m.TTaskCreater == loggedinUser)
                 .ToList();
 
             return matchingTasks;
         }
+
+        
 
         public async Task<IEnumerable<TUserTask>> GetAllTasksOfUser(string loggedinUser)
         {

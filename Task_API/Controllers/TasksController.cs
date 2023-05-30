@@ -39,7 +39,7 @@ namespace Task_API.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("GetAllTasks")]
-        public async Task<ActionResult<MPaginationParameters>> GetAllTasks(int page, float recordsPerPage)
+        public async Task<ActionResult<MPaginationParameters>> GetAllTasks(int page, float recordsPerPage, string? searchWithContent)
         {
             string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is loggedin
             var userIsValidOrNo = await _userRepository.UserIsActiveOrNot(loggedinUser);
@@ -48,7 +48,11 @@ namespace Task_API.Controllers
                 try
                 {
 
-                    //string loggedinUser = HttpContext.User.FindFirstValue("UserName"); // code to get username who is logged in 
+                    if(searchWithContent != null)
+                    {
+                        var searchedTask = await _tasksRepository.SearchingWithAnyType(searchWithContent, loggedinUser);
+                        return StatusCode(200, searchedTask);
+                    }
 
                     var taskList = await _tasksRepository.GetAllTaskByPage(page, loggedinUser, recordsPerPage);
 
