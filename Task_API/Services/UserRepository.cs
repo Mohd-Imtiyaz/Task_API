@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 using Task_API.DBContext;
 using Task_API.Interfaces;
 using Task_API.ManualClasses;
@@ -60,6 +58,7 @@ namespace Task_API.Services
             adduser.Roles = "User";
             adduser.UEmail = muser.UEmail;
             adduser.ActiveStatus = "Active";
+            
 
             await _taskDataBaseContext.TUsers.AddAsync(adduser);
             await _taskDataBaseContext.SaveChangesAsync();
@@ -117,4 +116,3 @@ namespace Task_API.Services
         }
     }
 }
-

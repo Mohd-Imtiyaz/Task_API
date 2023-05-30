@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Task_API.DBContext;
 using Task_API.Interfaces;
 using Task_API.ManualClasses;
@@ -15,13 +16,29 @@ namespace Task_API.Services
             _taskDataBaseContext = taskDataBaseContext;
         }
 
-        public async Task<IEnumerable<TUserTask>> GetAllTasks(bool isAccending)
+        public async Task<MPaginationParameters> GetAllTasks(bool isAccending, int page, float PageResults)
         {
-            var allTask = await _taskDataBaseContext.TUserTasks.ToListAsync();
+            //var allTask = await _taskDataBaseContext.TUserTasks.ToListAsync();
 
-            allTask = isAccending ? allTask.OrderByDescending(m => m.TTitle).ToList() : allTask.OrderBy(m => m.TTitle).ToList();
+             
+            // trial
 
-            return allTask;  
+            var PageCount = Math.Ceiling(_taskDataBaseContext.TUserTasks.Count() / PageResults);
+            var task = await _taskDataBaseContext.TUserTasks.Skip((page - 1) * (int)PageResults).Take((int)PageResults).ToListAsync();
+
+            task = isAccending ? task.OrderByDescending(m => m.TTitle).ToList() : task.OrderBy(m => m.TTitle).ToList();
+
+
+            var response = new MPaginationParameters
+            {
+                AllTasks = task,
+                CurrentPage = page,
+                Pages = (int)PageCount
+            };
+            return response;
+            // end trial
+
+            //return allTask;  
         }
 
 
